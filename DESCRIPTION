@@ -1,0 +1,17 @@
+Package: safuzzy
+Type: Package
+Title: Análises de Adaptabilidade e Estabilidade com inferência Fuzzy
+Version: 0.1.0
+Authors@R: c(
+    person(
+      "Maciel", "Douglas, O.",
+      email = "douglasmaciel@discente.ufg.br",
+      role = c("aut", "cre")
+    )
+  )
+Description: More about what it does (maybe more than one line).
+    Continuation lines should be indented.
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.3.2
