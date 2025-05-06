@@ -45,13 +45,6 @@ hibrido <- function(Dados, variavel) {
   se <- QMR / nrep
   VarB1 <- se / sum(X^2)
 
-  # --- Padronização ---
-  padronizar <- function(x, LI, LS) {
-    BMax <- mean(x) + 3 * sd(x)
-    BMin <- mean(x) - 3 * sd(x)
-    sapply(x, function(v) LS + (LS - LI) * (v - BMax) / (BMax - BMin))
-  }
-
   B1Pad <- padronizar(D[, "B1"], -2, 4)
   R2Pad <- D[, "R2"] * 100
 

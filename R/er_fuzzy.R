@@ -7,7 +7,10 @@
 #'
 #' @param Dados Arquivo de dados com as variáveis. Deve ser organizado na seguinte ordem: Ambiente, Genótipo, Bloco.
 #'
-#' @param variavel Variável a ser análisada.s
+#' @param variavel Variável a ser análisada.
+#'
+#' @return Um data frame contendo as seguintes estimativas:
+#'    \item{\code{Media(\beta_{0})}}{Para cada genótipo.}
 #'
 #' @examples
 #' eberhart_russel(Dados = dados, varivavel = prod)

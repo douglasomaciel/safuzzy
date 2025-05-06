@@ -9,7 +9,11 @@ eberhart_russel(Dados, variavel)
 \arguments{
 \item{Dados}{Arquivo de dados com as variáveis. Deve ser organizado na seguinte ordem: Ambiente, Genótipo, Bloco.}
 
-\item{variavel}{Variável a ser análisada.s}
+\item{variavel}{Variável a ser análisada.}
+}
+\value{
+Um data frame contendo as seguintes estimativas:
+   \item{\code{Media(B_0)}}{Para cada genótipo.}
 }
 \description{
 Análise de Estabilidade e Adaptabilidade baseado na interpretação da metodologia de Eberhart & Russel 1966, desenvolvido por Carneiro et al. 2018.
