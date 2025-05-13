@@ -1,0 +1,12 @@
+citHeader("Para citar este pacote, use:")
+bibentry(
+  bibtype = "Article",
+  title = "Título do seu artigo",
+  author = c(person("SeuNome", "Sobrenome")),
+  journal = "Nome do Periódico",
+  year = 2025,
+  volume = "Volume",
+  pages = "Página inicial–final",
+  doi = "10.xxxx/xxxxxx",
+  note = "Pacote disponível em: https://github.com/usuario/nome_pacote"
+)
