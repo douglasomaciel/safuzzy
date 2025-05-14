@@ -1,6 +1,6 @@
 Package: safuzzy
 Type: Package
-Title: Análises de Adaptabilidade e Estabilidade com inferência Fuzzy
+Title: safuzzy: Stability Analysis with Fuzzy logic
 Version: 0.1.0
 Authors@R: c(
     person(
@@ -9,9 +9,11 @@ Authors@R: c(
       role = c("aut", "cre")
     )
   )
-Description: More about what it does (maybe more than one line).
-    Continuation lines should be indented.
-License: What license is it under?
+Description: safuzzy: Uma ferramenta poderosa para análise de adaptabilidade e estabilidade
+            de genótipos que integra a lógica fuzzy. Através da classificação baseada em graus de pertinência,
+            o pacote oferece uma avaliação detalhada do comportamento dos genótipos em distintos grupos de ambientes,
+            proporcionando insights valiosos para o melhoramento genético.
+License: MIT
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.3.2
