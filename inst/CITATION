@@ -1,12 +1,10 @@
-citHeader("Para citar este pacote, use:")
+citHeader("To cite this package, use:")
 bibentry(
   bibtype = "Article",
   title = "safuzzy: Stability Analysis with Fuzzy logic",
   author = c(person("Douglas", "Maciel")),
-  journal = "Nome do Periódico",
+  journal = "R package",
   year = 2025,
-  volume = "Volume",
-  pages = "Página inicial–final",
-  doi = "10.xxxx/xxxxxx",
-  note = "Pacote disponível em: https://github.com/usuario/nome_pacote"
+  doi = "10.5281/zenodo.15419945",
+  note = "Package available in: https://github.com/douglasomaciel/safuzzy"
 )
