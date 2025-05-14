@@ -1,8 +1,8 @@
 citHeader("Para citar este pacote, use:")
 bibentry(
   bibtype = "Article",
-  title = "Título do seu artigo",
-  author = c(person("SeuNome", "Sobrenome")),
+  title = "safuzzy: Stability Analysis with Fuzzy logic",
+  author = c(person("Douglas", "Maciel")),
   journal = "Nome do Periódico",
   year = 2025,
   volume = "Volume",

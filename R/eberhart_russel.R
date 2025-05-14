@@ -1,27 +1,32 @@
-#' Eberhart & Russel método
+#' Eberhart & Russel method
 #'
 #' @description
-#' Análise de Adaptabilidade e Estabilidade baseado na interpretação da metodologia de Eberhart & Russel 1966, desenvolvido por Carneiro et al. 2018.
+#' Adaptability and Stability Analysis based on the interpretation of the Eberhart & Russel 1966 methodology, developed by Carneiro et al. 2018.
 #'
 #' @references Carneiro, V. Q., Prado, A. L. D., Cruz, C. D., Carneiro, P. C. S., Nascimento, M., & Carneiro, J. E. D. S. (2018). Fuzzy control systems for decision-making in cultivars recommendation. Acta Scientiarum. Agronomy, 40, e39314.
 #'
-#' @param dados Arquivo de dados (data.frame) com as variáveis.
-#' @param ambiente Coluna com as informações de embiente.
-#' @param genotipo Coluna contendo informações de genótipo.
-#' @param bloco coluna contendo informações de bloco.
-#' @param variavel Variável a ser análisada.
+#' @param data Data file (data.frame) with variables.
+#' @param env Column with environment information.
+#' @param gen Coluna contendo informações de genótipo.
+#' @param rep Column containing genotype information.
+#' @param var Variable to be analyzed.
+#'
 #'
 #' @return Um data frame contendo as seguintes estimativas:
 #'   \itemize{
-#'     \item{\code{Gen}}{: Genótipo.}
+#'     \item{\code{Gen}}{: Genotype.}
 #'     \item{\code{B_0}}{: Média da variável para cada genótipo.}
-#'     \item{\code{B_1}}{: Coeficiente de regressão (B_1i) para cada genótipo.}
-#'     \item{\code{R2}}{: Coeficiente de determinação (R²) padronizado para cada genótipo.}
-#'     \item{\code{GE}}{: Pertinência (\%) para o grupo de genótipos de estabilidade geral.}
-#'     \item{\code{PA}}{: Pertinência (\%) para o grupo de genótipos pouco adaptados.}
-#'     \item{\code{FAV}}{: Pertinência (\%) para o grupo de genótipos com adaptabilidade favorável.}
-#'     \item{\code{Des}}{: Pertinência (\%) para o grupo de genótipos adaptados a ambientes desfavoráveis.}
+#'     \item{\code{B_1}}{: Regression coefficient (B_1) for each genotype.}
+#'     \item{\code{R2}}{: Standardized coefficient of determination (R²) for each genotype.}
+#'     \item{\code{GE}}{: Membership (\%) to the general stability genotypes group.}
+#'     \item{\code{PA}}{: Membership (\%) to the  poorly adapted geotypes group.}
+#'     \item{\code{FAV}}{: Membership (\%) to the favorable adaptade genotypes group.}
+#'     \item{\code{UNF}}{: Membership (\%) to the unffavorable adaptade genotypes group.}
 #'   }
+#'
+#'
+#' @seealso \code{\link{hybrid}}
+#' @seealso \code{\link{lin_binns}}
 #'
 #' @author Douglas de Oliveira Maciel \email{douglasmaciel@discente.ufg.br}
 #'
@@ -33,18 +38,18 @@
 #' dados = read.csv2(caminho)
 #'
 #' # Uso da função com a variável de interesse
-#' eberhart_russel(dados, ambiente = environment, genotipo = treatment, bloco = block, variavel = gy)
+#' eberhart_russell(data = dados, env = environment, gen = treatment, rep = block, var = gy)
 #'
 
 #' @export
 
-eberhart_russel = function(dados, ambiente, genotipo, bloco, variavel){
+eberhart_russell = function(data, env, gen, rep, var){
   library(dplyr)
-  Dados <- dados %>%
-    rename(Amb = {{ambiente}},
-           Gen = {{genotipo}},
-           Rep = {{bloco}},
-           Yvar = {{variavel}})
+  Dados <- data %>%
+    rename(Amb = {{env}},
+           Gen = {{gen}},
+           Rep = {{rep}},
+           Yvar = {{var}})
 
   Dados$Amb <- as.factor(Dados$Amb)
   Dados$Gen <- as.factor(Dados$Gen)
@@ -156,7 +161,7 @@ eberhart_russel = function(dados, ambiente, genotipo, bloco, variavel){
   PertSaida <- t(PertSaida) # Transpor para que as linhas sejam os genótipos
 
   GE <- apply(PertSaida[, 10, drop = FALSE], 1, max)
-  Des <- apply(PertSaida[, 8, drop = FALSE], 1, max)
+  UNF <- apply(PertSaida[, 8, drop = FALSE], 1, max)
   PA <- apply(PertSaida[, c(1:7, 9, 12), drop = FALSE], 1, max)
   FAV <- apply(PertSaida[, 13, drop = FALSE], 1, max)
   GF <- apply(PertSaida[, 11, drop = FALSE], 1, max)
@@ -166,7 +171,7 @@ eberhart_russel = function(dados, ambiente, genotipo, bloco, variavel){
     GE = GE,
     PA = PA,
     FAV = FAV,
-    Des = Des
+    UNF = UNF
   )
 
   ResultadoER <- left_join(reg, Pertinencias, by = "Gen")
@@ -178,8 +183,8 @@ eberhart_russel = function(dados, ambiente, genotipo, bloco, variavel){
     mutate(GE = round(GE*100,0))%>%
     mutate(PA = round(PA*100,0))%>%
     mutate(FAV = round(FAV*100,0))%>%
-    mutate(Des = round(Des*100,0))%>%
-    select(Gen,B_0,B_1,R2,GE,PA,FAV,Des)
+    mutate(UNF = round(UNF*100,0))%>%
+    select(Gen,B_0,B_1,R2,GE,PA,FAV,UNF)
 
   return(saida)
 
