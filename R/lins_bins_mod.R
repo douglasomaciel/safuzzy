@@ -1,6 +1,6 @@
-#' Modified method of Lin & Binns
+#' Modified method of Lin & Binns (1988)
 #'
-#' @description Stability and Adaptability Analysis based on the interpretation of the modified Lins and Bins methodology.
+#' @description Stability and Adaptability Analysis based on the interpretation of the modified Lins and Bins (1988) methodology.
 #'
 #' @references Carneiro, P. C. S. (1998). Novas metodologias de análise da adaptabilidade e estabilidade de comportamento (Doctoral dissertation, Universidade Federal de Viçosa.).
 #'
@@ -9,6 +9,8 @@
 #' @param gen Coluna contendo informações de genótipo.
 #' @param rep Column containing genotype information.
 #' @param var Variable to be analyzed.
+#'
+#' @import dplyr
 #'
 #' @return A data frame containing the following estimates:
 #'   \itemize{
@@ -40,7 +42,6 @@
 
 lin_binns = function(data, env, gen, rep, var) {
 
-  library(dplyr)
   Dados <- data %>%
     rename(Amb = {{env}},
            Gen = {{gen}},
@@ -103,8 +104,8 @@ lin_binns = function(data, env, gen, rep, var) {
 
   # pertinences
   pert_pif <- pif_pid %>%
-    mutate(pif_baixa = zmf(pif_pad, 0, 80),
-           pif_alta = smf(pif_pad, 0, 80)) %>%
+    mutate(pif_baixa = zmf(pif_pad, 0, 60),
+           pif_alta = smf(pif_pad, 0, 60)) %>%
     select(Gen, pif_baixa, pif_alta)
 
   pert_pid <- pif_pid %>%

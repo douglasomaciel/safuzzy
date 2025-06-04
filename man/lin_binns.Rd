@@ -2,7 +2,7 @@
 % Please edit documentation in R/lins_bins_mod.R
 \name{lin_binns}
 \alias{lin_binns}
-\title{Modified method of Lin & Binns}
+\title{Modified method of Lin & Binns (1988)}
 \usage{
 lin_binns(data, env, gen, rep, var)
 }
@@ -30,7 +30,7 @@ A data frame containing the following estimates:
   }
 }
 \description{
-Stability and Adaptability Analysis based on the interpretation of the modified Lins and Bins methodology.
+Stability and Adaptability Analysis based on the interpretation of the modified Lins and Bins (1988) methodology.
 }
 \examples{
 # Caminho do arquivo de dados

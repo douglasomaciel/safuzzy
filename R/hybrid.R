@@ -1,7 +1,7 @@
-#' Hybrd method
+#' Hybrid method
 #'
 #' @description
-#' Stability and Adaptability Analysis based on the interpretation of the Eberhart & Russel 1966 methodology, associated with the modified Lins & Bins method, developed by Carneiro et al. (2020).
+#' Stability and Adaptability Analysis based on the interpretation of the Eberhart & Russel 1966 methodology, associated with the modified Lins & Bins (1988) methodology, developed by Carneiro et al. (2020).
 #'
 #' @references Carneiro, A. R. T., Sanglard, D. A., Azevedo, A. M., Souza, T. L. P. O. D., Pereira, H. S., Melo, L. C., & Carneiro, P. C. S. (2020). Fuzzy logic applied to different adaptability and stability methods in common bean. Pesquisa agropecuária brasileira, 55, e01609.
 #'
@@ -10,6 +10,8 @@
 #' @param gen Coluna contendo informações de genótipo.
 #' @param rep Column containing genotype information.
 #' @param var Variable to be analyzed.
+#'
+#' @import dplyr
 #'
 #' @return Um data frame contendo as seguintes estimativas:
 #'   \itemize{
@@ -43,16 +45,16 @@
 
 hybrid = function(data, env, gen, rep, var) {
 
-  library(dplyr)
   Dados <- data %>%
     rename(Amb = {{env}},
            Gen = {{gen}},
            Rep = {{rep}},
            Yvar = {{var}})
 
-  Dados$Amb <- as.factor(Dados$Amb)
-  Dados$Gen <- as.factor(Dados$Gen)
-  Dados$Rep <- as.factor(Dados$Rep)
+  Dados <- Dados %>%
+    mutate(Amb = as.factor(Amb),
+           Gen = as.factor(Gen),
+           Rep = as.factor(Rep))
 
   media_amb <- Dados %>%
     group_by(Amb) %>%

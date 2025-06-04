@@ -1,4 +1,4 @@
-#' Eberhart & Russel method
+#' Eberhart & Russel (1966) method
 #'
 #' @description
 #' Adaptability and Stability Analysis based on the interpretation of the Eberhart & Russel 1966 methodology, developed by Carneiro et al. 2018.
@@ -11,13 +11,14 @@
 #' @param rep Column containing genotype information.
 #' @param var Variable to be analyzed.
 #'
+#' @import dplyr
 #'
-#' @return Um data frame contendo as seguintes estimativas:
+#' @return A data frame containing the following estimates:
 #'   \itemize{
 #'     \item{\code{Gen}}{: Genotype.}
-#'     \item{\code{B_0}}{: Média da variável para cada genótipo.}
+#'     \item{\code{B_0}}{: Mean of the variable for each genotype.}
 #'     \item{\code{B_1}}{: Regression coefficient (B_1) for each genotype.}
-#'     \item{\code{R2}}{: Standardized coefficient of determination (R²) for each genotype.}
+#'     \item{\code{R2}}{: Coefficient of determination (R²) for each genotype.}
 #'     \item{\code{GE}}{: Membership (\%) to the general stability genotypes group.}
 #'     \item{\code{PA}}{: Membership (\%) to the  poorly adapted geotypes group.}
 #'     \item{\code{FAV}}{: Membership (\%) to the favorable adaptade genotypes group.}
@@ -44,16 +45,16 @@
 #' @export
 
 eberhart_russell = function(data, env, gen, rep, var){
-  library(dplyr)
   Dados <- data %>%
     rename(Amb = {{env}},
            Gen = {{gen}},
            Rep = {{rep}},
            Yvar = {{var}})
 
-  Dados$Amb <- as.factor(Dados$Amb)
-  Dados$Gen <- as.factor(Dados$Gen)
-  Dados$Rep <- as.factor(Dados$Rep)
+  Dados <- Dados %>%
+    mutate(Amb = as.factor(Amb),
+           Gen = as.factor(Gen),
+           Rep = as.factor(Rep))
 
   media_amb <- Dados %>%
     group_by(Amb) %>%
