@@ -167,9 +167,9 @@ annicchiarico = function(data, env, gen, rep, var){
   PertSaida <- t(PertSaida) # Transpor para que as linhas sejam os genótipos
 
   GE <- apply(PertSaida[, 3, drop = FALSE], 1, max)
-  UNF <- apply(PertSaida[, 1, drop = FALSE], 1, max)
-  PA <- apply(PertSaida[, 2, drop = FALSE], 1, max)
-  FAV <- apply(PertSaida[, 4, drop = FALSE], 1, max)
+  UNF <- apply(PertSaida[, 2, drop = FALSE], 1, max)
+  PA <- apply(PertSaida[, 4, drop = FALSE], 1, max)
+  FAV <- apply(PertSaida[, 1, drop = FALSE], 1, max)
 
   Pertinencias <- data.frame(
     Gen = W$Gen, # Agregar Gen aquí
