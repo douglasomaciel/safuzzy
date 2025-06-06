@@ -30,6 +30,7 @@
 #'
 #' @seealso \code{\link{eberhart_russell}}
 #' @seealso \code{\link{lin_binns}}
+#' @seealso \code{\link{annicchiarico}}
 #'
 #' @examples
 #' # Caminho do arquivo de dados
@@ -49,12 +50,9 @@ hybrid = function(data, env, gen, rep, var) {
     rename(Amb = {{env}},
            Gen = {{gen}},
            Rep = {{rep}},
-           Yvar = {{var}})
+           Yvar = {{var}})%>%
+    mutate(across(c(Amb, Gen, Rep), as.factor))
 
-  Dados <- Dados %>%
-    mutate(Amb = as.factor(Amb),
-           Gen = as.factor(Gen),
-           Rep = as.factor(Rep))
 
   media_amb <- Dados %>%
     group_by(Amb) %>%
@@ -98,7 +96,7 @@ hybrid = function(data, env, gen, rep, var) {
     summarise(
       med = mean(Yvar),
       b = coef(lm(Yvar ~ IJ))[2],
-      R2 = summary(lm(Yvar ~ IJ))$r.squared
+      r2 = summary(lm(Yvar ~ IJ))$r.squared
     )
 
   # modelo
@@ -123,10 +121,9 @@ hybrid = function(data, env, gen, rep, var) {
 
   # R2 padronizado
   reg <- reg %>%
-    mutate(r_pad = R2 * 100)
+    mutate(R2 = r2 * 100)
 
-  # Padronizar pif i pid
-
+  # Padronizar pif e pid
   LI=0
   LS=100
 
@@ -136,36 +133,34 @@ hybrid = function(data, env, gen, rep, var) {
   PIDMin=mean(pif_pid$PID)-3*sd(pif_pid$PID)
 
   pif_pid <- pif_pid %>%
-    mutate(pif_pad = LS + (LS - LI) * (PIF - PIFMax) / (PIFMax - PIFMin))%>%
-    mutate(pid_pad = LS + (LS - LI) * (PID - PIDMax) / (PIDMax - PIDMin))
+    mutate(pif_pad = LS + (LS - LI) * (PIF - PIFMax) / (PIFMax - PIFMin),
+           pid_pad = LS + (LS - LI) * (PID - PIDMax) / (PIDMax - PIDMin))
 
   reg <- pif_pid %>%
     left_join(reg, by = "Gen")
 
-  # pertinences
+  #Fuzificação
   pert_pif <- reg %>%
-    mutate(pif_baixa = zmf(pif_pad, 0, 100),
-           pif_alta = smf(pif_pad, 0, 100)) %>%
-    select(Gen, pif_baixa, pif_alta)
+    mutate(baixo = zmf(pif_pad, 0, 100),
+           alto = smf(pif_pad, 0, 100)) %>%
+    select(Gen, baixo, alto)
 
   pert_pid <- reg %>%
-    mutate(pid_baixa = zmf(pid_pad, 0, 100),
-           pid_alta = smf(pid_pad, 0, 100)) %>%
-    select(Gen, pid_baixa, pid_alta)
+    mutate(baixo = zmf(pid_pad, 0, 100),
+           alto = smf(pid_pad, 0, 100)) %>%
+    select(Gen, baixo, alto)
 
   pert_b <- reg %>%
-    mutate(b_menor = zmf(b_pad, -5, 1),
-           b_igual = pimf(b_pad, -5, 1, 1, 7),
-           b_maior = smf(b_pad, 1, 7)) %>%
-    select(Gen, b_menor, b_igual, b_maior)
+    mutate(menor = zmf(b_pad, -5, 1),
+           igual = pimf(b_pad, -5, 1, 1, 7),
+           maior = smf(b_pad, 1, 7)) %>%
+    select(Gen, menor, igual, maior)
 
   pert_r <- reg %>%
-    mutate(r_baixa = zmf(r_pad, 60, 100),
-           r_alta = smf(r_pad, 60, 100)) %>%
-    select(Gen, r_baixa, r_alta)
+    mutate(baixo = zmf(R2, 60, 100),
+           alto = smf(R2, 60, 100)) %>%
+    select(Gen, baixo, alto)
 
-
-  # --- Regles i Inferencia ---
   Regras <- matrix(c(
     1, 1, 1, 1, 3,
     1, 1, 1, 2, 2,
@@ -193,46 +188,41 @@ hybrid = function(data, env, gen, rep, var) {
     2, 2, 3, 2, 3
   ), ncol = 5, byrow = TRUE)
 
-  # Aplicar les regles
+  # Aplicar as regras
   PertSaida <- sapply(1:nrow(reg), function(i) {
     sapply(1:nrow(Regras), function(j) {
       min(c(
-        pert_pif[[i, Regras[j, 1] + 1]], # +1 por a 1 coluna é Gen
+        pert_pif[[i, Regras[j, 1] + 1]], # +1 porque a 1 coluna é Gen
         pert_pid[[i, Regras[j, 2] + 1]],
         pert_b[[i, Regras[j, 3] + 1]],
         pert_r[[i, Regras[j, 4] + 1]]
       ))
     })
-  })
-
-  PertSaida <- t(PertSaida) # Transpor para que as linhas sejam os genótipos
+  }) %>% t()
 
   GE=apply(cbind(PertSaida[,6]),1,max)
-  Des=apply(cbind(PertSaida[,c(2,14,18)]),1,max)
+  UNF=apply(cbind(PertSaida[,c(2,14,18)]),1,max)
   PA=apply(cbind(PertSaida[,c(1,3:5,7:9,11,13,15:17,19:24)]),1,max)
   FAV=apply(cbind(PertSaida[,c(10,12)]),1,max)
-  GF=apply(cbind(PertSaida[,6]),1,max)
 
   Pertinencias <- data.frame(
     Gen = reg$Gen, # Agregar Gen aquí
     GE = GE,
     PA = PA,
     FAV = FAV,
-    Des = Des
+    UNF = UNF
   )
 
   Resultado <- left_join(reg, Pertinencias, by = "Gen")
 
   saida = Resultado%>%
-    mutate(PIF = round(PIF,2))%>%
-    mutate(PID = round(PID,2)) %>%
-    mutate(B_1 = round(b,4))%>%
-    mutate(R2 = r_pad)%>%
-    mutate(GE = round(GE*100,0))%>%
-    mutate(PA = round(PA*100,0))%>%
-    mutate(FAV = round(FAV*100,0))%>%
-    mutate(Des = round(Des*100,0))%>%
-    select(Gen,PIF,PID,B_1,R2,GE,PA,FAV,Des)
+    rename(B_1 = b)%>%
+    mutate(
+      across(c(PIF,PID,R2),~round(.x,2)),
+      B_1 = round(B_1,4),
+      across(c(GE,PA,FAV,UNF),~round(.x*100,0))
+    )%>%
+    select(Gen,PIF,PID,B_1,R2,GE,PA,FAV,UNF)
 
 
   return(saida) # Retornar um data.frame com as estimativas de parâmetros de adpt. estab. e pertinências

@@ -52,6 +52,8 @@ Carneiro, A. R. T., Sanglard, D. A., Azevedo, A. M., Souza, T. L. P. O. D., Pere
 \code{\link{eberhart_russell}}
 
 \code{\link{lin_binns}}
+
+\code{\link{annicchiarico}}
 }
 \author{
 Douglas de Oliveira Maciel \email{douglasmaciel@discente.ufg.br}

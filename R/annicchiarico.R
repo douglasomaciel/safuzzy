@@ -13,6 +13,7 @@
 #'
 #' @import dplyr
 #' @import tidyr
+#' @import purrr
 #'
 #' @return A data frame containing the following estimates:
 #'   \itemize{
@@ -47,107 +48,56 @@
 
 annicchiarico = function(data, env, gen, rep, var){
   Dados <- data %>%
-    rename(Amb = {{env}},
-           Gen = {{gen}},
-           Rep = {{rep}},
-           Yvar = {{var}})
-
-  Dados <- Dados %>%
-    mutate(Amb = as.factor(Amb),
-           Gen = as.factor(Gen),
-           Rep = as.factor(Rep))
+    rename(Amb = {{env}}, Gen = {{gen}}, Rep = {{rep}}, Yvar = {{var}}) %>%
+    mutate(across(c(Amb, Gen, Rep), as.factor))
 
   media_amb <- Dados %>%
     group_by(Amb) %>%
-    summarise(Yvar = mean(Yvar, na.rm = TRUE)) # Média dos ambientes
+    summarise(Yvar_amb = mean(Yvar, na.rm = TRUE), .groups = "drop")
 
   IJ <- media_amb %>%
-    mutate(IJ = Yvar - mean(Yvar)) %>%  # Índice ambiental
+    mutate(IJ = Yvar_amb - mean(Yvar_amb)) %>%
     select(Amb, IJ)
 
-  media_GxA <- Dados %>%
+  Y <- Dados %>%
     group_by(Gen, Amb) %>%
-    summarise(Yvar = mean(Yvar, na.rm = TRUE))
+    summarise(Yvar = mean(Yvar, na.rm = TRUE), .groups = "drop") %>%
+    left_join(media_amb, by = "Amb") %>%
+    mutate(Yp = 100 * Yvar / Yvar_amb) %>%
+    select(Gen, Amb, Yp)
 
-  # Juntar as médias GxA com o índice ambiental
-  GxA_Env <- media_GxA %>%
-    left_join(IJ, by = "Amb")
+  calc_W <- function(df) {
+    df %>%
+      group_by(Gen) %>%
+      summarise(
+        mean_Yp = mean(Yp, na.rm = TRUE),
+        sd_Yp = sd(Yp, na.rm = TRUE),
+        .groups = "drop"
+      ) %>%
+      mutate(W = mean_Yp - sd_Yp * qnorm(0.75)) %>%
+      select(Gen, W)
+  }
 
-  Y = media_GxA %>%
-    left_join(media_amb, by = "Amb", suffix = c("", "_ambiente")) %>% # Junta a média do ambiente
-    mutate(Yp = 100 * Yvar / Yvar_ambiente) %>% # Yvar é a média GxA, Yvar_ambiente é a média do ambiente
-    select(-Yvar_ambiente) # Remove a coluna extra se não for mais necessária
+  Wg <- calc_W(Y) %>% rename(Wg = W)
 
-  # Cálculo do Wg
-  Wg <- Y %>%
-    group_by(Gen) %>% # Agrupar por Genótipo
-    summarise(
-      # Média dos valores de Yp para cada genótipo
-      mean_Yp_gen = mean(Yp, na.rm = TRUE),
-      # Desvio padrão dos valores de Yp para cada genótipo
-      sd_Yp_gen = sd(Yp, na.rm = TRUE)
-    ) %>%
-    # Aplicar a fórmula do Wg
-    mutate(Wg = mean_Yp_gen - sd_Yp_gen * qnorm(0.75)) %>%
-    select(Gen, Wg) # Selecionar apenas o Gen e o valor final de Wg
+  desfav <- IJ %>% filter(IJ <= 0) %>% pull(Amb)
+  favorav <- IJ %>% filter(IJ > 0) %>% pull(Amb)
 
-  # Passo 1: Identificar os ambientes desfavoráveis
-  ambientes_desfavoraveis <- IJ %>%
-    filter(IJ <= 0) %>%
-    pull(Amb) # pull() extrai a coluna como um vetor simples
+  Wd <- calc_W(Y %>% filter(Amb %in% desfav)) %>% rename(Wd = W)
+  Wf <- calc_W(Y %>% filter(Amb %in% favorav)) %>% rename(Wf = W)
 
-  # Passo 2: Filtrar o data frame Y para incluir APENAS os ambientes desfavoráveis
-  Y_desfavoravel <- Y %>%
-    filter(Amb %in% ambientes_desfavoraveis)
+  W <- reduce(list(Wg, Wd, Wf), left_join, by = "Gen")
 
-  # Passo 3: Calcular Wd sobre os Yp dos ambientes desfavoráveis
-  Wd <- Y_desfavoravel %>%
-    group_by(Gen) %>% # Agrupar por Genótipo
-    summarise(
-      # Média dos valores de Yp para cada genótipo, APENAS nos ambientes desfavoráveis
-      mean_Yp_desfavoravel = mean(Yp, na.rm = TRUE),
-      # Desvio padrão dos valores de Yp para cada genótipo, APENAS nos ambientes desfavoráveis
-      sd_Yp_desfavoravel = sd(Yp, na.rm = TRUE)
-    ) %>%
-    # Aplicar a fórmula do Wd
-    mutate(Wd = mean_Yp_desfavoravel - sd_Yp_desfavoravel * qnorm(0.75)) %>%
-    select(Gen, Wd) # Selecionar apenas o Gen e o valor final de Wd
+# Fuzificação
+  pert_wd <- W%>%mutate(
+    baixa = zmf(Wd,0,200),
+    alta = smf(Wd,0,200)
+  )%>%select(Gen, baixa, alta)
 
-  # Passo 1: Identificar os ambientes favoráveis
-  ambientes_favoraveis <- IJ %>%
-    filter(IJ > 0) %>%
-    pull(Amb) # pull() extrai a coluna como um vetor simples
-
-  # Passo 2: Filtrar o data frame Y para incluir APENAS os ambientes favoráveis
-  Y_favoravel <- Y %>%
-    filter(Amb %in% ambientes_favoraveis)
-
-  # Passo 3: Calcular Wd sobre os Yp dos ambientes favoráveis
-  Wf <- Y_favoravel %>%
-    group_by(Gen) %>% # Agrupar por Genótipo
-    summarise(
-      # Média dos valores de Yp para cada genótipo, APENAS nos ambientes favoráveis
-      mean_Yp_favoravel = mean(Yp, na.rm = TRUE),
-      # Desvio padrão dos valores de Yp para cada genótipo, APENAS nos ambientes favoráveis
-      sd_Yp_favoravel = sd(Yp, na.rm = TRUE)
-    ) %>%
-    # Aplicar a fórmula do Wf
-    mutate(Wf = mean_Yp_favoravel - sd_Yp_favoravel * qnorm(0.75)) %>%
-    select(Gen, Wf) # Selecionar apenas o Gen e o valor final de Wf
-
-  W = Wg %>%
-    left_join(Wd, by="Gen")%>%
-    left_join(Wf, by="Gen")
-
-  pert_wd <- W %>%
-    mutate(wd_baixa = zmf(Wd, 0, 200),
-           wd_alta = smf(Wd, 0, 200)) %>%
-    select(Gen, wd_baixa, wd_alta) # Incluir Gen
-
-  pert_wf <- W %>%
-    mutate(wf_baixa = zmf(Wf, 0, 200),
-           wf_alta = smf(Wf, 0, 200)) %>%
-    select(Gen, wf_baixa, wf_alta) # Incluir Gen
+  pert_wf <- W%>%mutate(
+    baixa = zmf(Wf,0,200),
+    alta = smf(Wf,0,200)
+  )%>%select(Gen, baixa, alta)
 
   Regras=matrix(c(1,2,1,
                   2,1,2,
@@ -158,13 +108,11 @@ annicchiarico = function(data, env, gen, rep, var){
   PertSaida <- sapply(1:nrow(W), function(i) {
     sapply(1:nrow(Regras), function(j) {
       min(c(
-        pert_wd[[i, Regras[j, 1] + 1]], # +1 porque la 1ª columna es Gen
-        pert_wf[[i, Regras[j, 2] + 1]]
+        pert_wd[[i, Regras[j, 1]+1]],
+        pert_wf[[i, Regras[j, 2]+1]]
       ))
     })
-  })
-
-  PertSaida <- t(PertSaida) # Transpor para que as linhas sejam os genótipos
+  }) %>% t()
 
   GE <- apply(PertSaida[, 3, drop = FALSE], 1, max)
   UNF <- apply(PertSaida[, 2, drop = FALSE], 1, max)
@@ -172,7 +120,7 @@ annicchiarico = function(data, env, gen, rep, var){
   FAV <- apply(PertSaida[, 1, drop = FALSE], 1, max)
 
   Pertinencias <- data.frame(
-    Gen = W$Gen, # Agregar Gen aquí
+    Gen = W$Gen, # Agregar Gen aqui
     GE = GE,
     PA = PA,
     FAV = FAV,
@@ -182,13 +130,10 @@ annicchiarico = function(data, env, gen, rep, var){
   Resultado <- left_join(W, Pertinencias, by = "Gen")
 
   saida = Resultado%>%
-    mutate(Wg = round(Wg,2))%>%
-    mutate(Wd = round(Wd,2))%>%
-    mutate(Wf = round(Wf,2))%>%
-    mutate(GE = round(GE*100,0))%>%
-    mutate(PA = round(PA*100,0))%>%
-    mutate(FAV = round(FAV*100,0))%>%
-    mutate(UNF = round(UNF*100,0))%>%
+    mutate(
+      across(c(Wg,Wd,Wf),~round(.x,2)),
+      across(c(GE,PA,FAV,UNF),~round(.x*100,0))
+    )%>%
     select(Gen,Wg,Wd,Wf,GE,PA,FAV,UNF)
 
   return(saida)

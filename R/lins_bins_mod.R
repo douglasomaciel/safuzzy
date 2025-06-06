@@ -46,11 +46,8 @@ lin_binns = function(data, env, gen, rep, var) {
     rename(Amb = {{env}},
            Gen = {{gen}},
            Rep = {{rep}},
-           Yvar = {{var}})
-
-  Dados$Amb <- as.factor(Dados$Amb)
-  Dados$Gen <- as.factor(Dados$Gen)
-  Dados$Rep <- as.factor(Dados$Rep)
+           Yvar = {{var}})%>%
+    mutate(across(c(Amb, Gen, Rep), as.factor))
 
   media_amb <- Dados %>%
     group_by(Amb) %>%
@@ -89,7 +86,6 @@ lin_binns = function(data, env, gen, rep, var) {
     )
 
   # Padronizar pif i pid
-
   LI=0
   LS=100
 
@@ -104,17 +100,17 @@ lin_binns = function(data, env, gen, rep, var) {
 
   # pertinences
   pert_pif <- pif_pid %>%
-    mutate(pif_baixa = zmf(pif_pad, 0, 60),
-           pif_alta = smf(pif_pad, 0, 60)) %>%
-    select(Gen, pif_baixa, pif_alta)
+    mutate(baixo = zmf(pif_pad, 0, 60),
+           alto = smf(pif_pad, 0, 60)) %>%
+    select(Gen, baixo, alto)
 
   pert_pid <- pif_pid %>%
-    mutate(pid_baixa = zmf(pid_pad, 0, 100),
-           pid_alta = smf(pid_pad, 0, 100)) %>%
-    select(Gen, pid_baixa, pid_alta)
+    mutate(baixo = zmf(pid_pad, 0, 100),
+           alto = smf(pid_pad, 0, 100)) %>%
+    select(Gen, baixo, alto)
 
 
-  # --- Regras e inferência
+  #Matriz de regras
   Regras <- matrix(c(
     1, 1, 1,
     1, 2, 4,
@@ -130,9 +126,7 @@ lin_binns = function(data, env, gen, rep, var) {
         pert_pid[[i, Regras[j, 2] + 1]]
       ))
     })
-  })
-
-  PertSaida <- t(PertSaida) # Transpor para que as linhas sejam os genótipos
+  }) %>% t()
 
   GE=apply(cbind(PertSaida[,1]),1,max)
   UNF=apply(cbind(PertSaida[,3]),1,max)
@@ -151,14 +145,10 @@ lin_binns = function(data, env, gen, rep, var) {
   Resultado <- left_join(pif_pid, Pertinencias, by = "Gen")
 
   saida = Resultado%>%
-    mutate(PIF = round(PIF,2))%>%
-    mutate(PID = round(PID,2)) %>%
-    mutate(GE = round(GE*100,0))%>%
-    mutate(PA = round(PA*100,0))%>%
-    mutate(FAV = round(FAV*100,0))%>%
-    mutate(UNF = round(UNF*100,0))%>%
+    mutate(
+      across(c(PIF,PID),~round(.x,2)),
+      across(c(GE,PA,FAV,UNF),~round(.x*100,0)))%>%
     select(Gen,PIF,PID,GE,PA,FAV,UNF)
-
 
   return(saida) # Retornar um data.frame com as estimativas de parâmetros de adpt. estab. e pertinências
 }
