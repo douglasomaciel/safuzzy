@@ -168,7 +168,7 @@ eberhart_russell = function(data, env, gen, rep, var){
            B_1 = b)%>%
     mutate(B_1 = round(B_1,4),
            across(c(B_0,R2), ~ round(.x,2)),
-      across(c(R2,GE,PA,FAV,UNF), ~round(.x *100,0))
+      across(c(GE,PA,FAV,UNF), ~round(.x *100,0))
     )%>%
     select(Gen,B_0,B_1,R2,GE,PA,FAV,UNF)
 
