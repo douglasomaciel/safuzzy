@@ -200,17 +200,12 @@ hybrid = function(data, env, gen, rep, var) {
     })
   }) %>% t()
 
-  GE=apply(cbind(PertSaida[,6]),1,max)
-  UNF=apply(cbind(PertSaida[,c(2,14,18)]),1,max)
-  PA=apply(cbind(PertSaida[,c(1,3:5,7:9,11,13,15:17,19:24)]),1,max)
-  FAV=apply(cbind(PertSaida[,c(10,12)]),1,max)
-
-  Pertinencias <- data.frame(
+  Pertinencias <- tibble(
     Gen = reg$Gen, # Agregar Gen aquí
-    GE = GE,
-    PA = PA,
-    FAV = FAV,
-    UNF = UNF
+    GE = apply(PertSaida[,6, drop = FALSE],1,max),
+    PA = apply(PertSaida[,c(1,3:5,7:9,11,13,15:17,19:24), drop=FALSE],1,max),
+    FAV = apply(PertSaida[,c(10,12), drop=FALSE],1,max),
+    UNF = apply(PertSaida[,c(2,14,18), drop = FALSE],1,max)
   )
 
   Resultado <- left_join(reg, Pertinencias, by = "Gen")

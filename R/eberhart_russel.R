@@ -98,7 +98,6 @@ eberhart_russell = function(data, env, gen, rep, var){
   reg <- reg %>%
     mutate(med_pad = LS + (LS - LI) * (med - BMax) / (BMax - BMin))
 
-
   # beta 1 padronizado
   LI=-2
   LS=4
@@ -129,7 +128,6 @@ eberhart_russell = function(data, env, gen, rep, var){
            alto = smf(R2, 60, 100)) %>%
     select(Gen, baixo, alto) # Incluir Gen
 
-
   # regras
   Regras=matrix(c(1,1,1,3,
                   1,1,2,3,
@@ -148,25 +146,19 @@ eberhart_russell = function(data, env, gen, rep, var){
   PertSaida <- sapply(1:nrow(reg), function(i) {
     sapply(1:nrow(Regras), function(j) {
       min(c(
-        pert_med[[i, Regras[j, 1] + 1]], # +1 porque la 1ª columna es Gen
-        pert_b[[i, Regras[j, 2] + 1]],   # +1 porque la 1ª columna es Gen
-        pert_r[[i, Regras[j, 3] + 1]]    # +1 porque la 1ª columna es Gen
+        pert_med[[i, Regras[j, 1] + 1]], # +1 porque a 1ª columna é Gen
+        pert_b[[i, Regras[j, 2] + 1]],
+        pert_r[[i, Regras[j, 3] + 1]]
       ))
     })
   }) %>% t()
 
-
-  GE <- apply(PertSaida[, 10, drop = FALSE], 1, max)
-  UNF <- apply(PertSaida[, 8, drop = FALSE], 1, max)
-  PA <- apply(PertSaida[, c(1:7, 9, 11), drop = FALSE], 1, max)
-  FAV <- apply(PertSaida[, 12, drop = FALSE], 1, max)
-
-  Pertinencias <- data.frame(
+  Pertinencias <- tibble(
     Gen = reg$Gen, # Agregar Gen aqui
-    GE = GE,
-    PA = PA,
-    FAV = FAV,
-    UNF = UNF
+    GE = apply(PertSaida[, 10, drop = FALSE], 1, max),
+    PA = apply(PertSaida[, c(1:7, 9, 11), drop = FALSE], 1, max),
+    FAV = apply(PertSaida[, 12, drop = FALSE], 1, max),
+    UNF = apply(PertSaida[, 8, drop = FALSE], 1, max)
   )
 
   ResultadoER <- left_join(reg, Pertinencias, by = "Gen")

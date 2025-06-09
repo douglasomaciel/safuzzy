@@ -202,26 +202,16 @@ cruz_torres_vencovsky <- function(data, env, gen, rep, var){
     })
   }) %>% t()
 
-
-  MdAF <- apply(PertSaida[, c(1,4), drop = FALSE], 1, max)
-  MaxAF <- apply(PertSaida[, c(2,5), drop = FALSE], 1, max)
-  Nad <- apply(PertSaida[, c(3,6), drop = FALSE], 1, max)
-  MdAG <- apply(PertSaida[, 7, drop = FALSE], 1, max)
-  MaxAG <- apply(PertSaida[, 8, drop = FALSE], 1, max)
-  MaxDes <- apply(PertSaida[, 9, drop = FALSE], 1, max)
-  BE <- apply(PertSaida[, 10:18, drop = FALSE], 1, max)
-  BP <- apply(PertSaida[, 19:36, drop = FALSE], 1, max)
-
-  Pertinencias <- data.frame(
+  Pertinencias <- tibble(
     Gen = reg$Gen,
-    MdAF = MdAF,
-    MaxAF = MaxAF,
-    Nad = Nad,
-    MdAG = MdAG,
-    MaxAG = MaxAG,
-    MaxDes = MaxDes,
-    BE = BE,
-    BP = BP
+    MdAF = apply(PertSaida[, c(1,4), drop = FALSE], 1, max),
+    MaxAF = apply(PertSaida[, c(2,5), drop = FALSE], 1, max),
+    Nad = apply(PertSaida[, c(3,6), drop = FALSE], 1, max),
+    MdAG = apply(PertSaida[, 7, drop = FALSE], 1, max),
+    MaxAG = apply(PertSaida[, 8, drop = FALSE], 1, max),
+    MaxDes = apply(PertSaida[, 9, drop = FALSE], 1, max),
+    BE = apply(PertSaida[, 10:18, drop = FALSE], 1, max),
+    BP = apply(PertSaida[, 19:36, drop = FALSE], 1, max)
   )
 
   Resultado <- left_join(reg, Pertinencias, by = "Gen")
@@ -236,7 +226,6 @@ cruz_torres_vencovsky <- function(data, env, gen, rep, var){
       across(c(MdAF,MaxAF,Nad,MdAG,MaxAG,MaxDes,BE,BP), ~round(.x*100,0))
     )%>%
     select(Gen,B_0,B_1,B1_B2,R2,MdAF,MaxAF,Nad,MdAG,MaxAG,MaxDes,BE,BP)
-
 
   return(saida)
 

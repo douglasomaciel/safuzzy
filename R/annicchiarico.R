@@ -114,17 +114,12 @@ annicchiarico = function(data, env, gen, rep, var){
     })
   }) %>% t()
 
-  GE <- apply(PertSaida[, 3, drop = FALSE], 1, max)
-  UNF <- apply(PertSaida[, 2, drop = FALSE], 1, max)
-  PA <- apply(PertSaida[, 4, drop = FALSE], 1, max)
-  FAV <- apply(PertSaida[, 1, drop = FALSE], 1, max)
-
-  Pertinencias <- data.frame(
+  Pertinencias <- tibble(
     Gen = W$Gen, # Agregar Gen aqui
-    GE = GE,
-    PA = PA,
-    FAV = FAV,
-    UNF = UNF
+    GE = apply(PertSaida[, 3, drop = FALSE], 1, max),
+    PA = apply(PertSaida[, 4, drop = FALSE], 1, max),
+    FAV = apply(PertSaida[, 1, drop = FALSE], 1, max),
+    UNF = apply(PertSaida[, 2, drop = FALSE], 1, max)
   )
 
   Resultado <- left_join(W, Pertinencias, by = "Gen")

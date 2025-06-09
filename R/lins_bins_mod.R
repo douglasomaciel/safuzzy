@@ -109,7 +109,6 @@ lin_binns = function(data, env, gen, rep, var) {
            alto = smf(pid_pad, 0, 100)) %>%
     select(Gen, baixo, alto)
 
-
   #Matriz de regras
   Regras <- matrix(c(
     1, 1, 1,
@@ -128,18 +127,17 @@ lin_binns = function(data, env, gen, rep, var) {
     })
   }) %>% t()
 
-  GE=apply(cbind(PertSaida[,1]),1,max)
-  UNF=apply(cbind(PertSaida[,3]),1,max)
-  PA=apply(cbind(PertSaida[,4]),1,max)
-  FAV=apply(cbind(PertSaida[,2]),1,max)
-  GF=apply(cbind(PertSaida[,1]),1,max)
+  GE=apply(PertSaida[,1,drop=FALSE],1,max)
+  UNF=apply(PertSaida[,3,drop=FALSE],1,max)
+  PA=apply(PertSaida[,4,drop=FALSE],1,max)
+  FAV=apply(PertSaida[,2,drop=FALSE],1,max)
 
-  Pertinencias <- data.frame(
+  Pertinencias <- tibble(
     Gen = pif_pid$Gen, # Agregar Gen aquí
-    GE = GE,
-    PA = PA,
-    FAV = FAV,
-    UNF = UNF
+    GE=apply(PertSaida[,1,drop=FALSE],1,max),
+    UNF=apply(PertSaida[,3,drop=FALSE],1,max),
+    PA=apply(PertSaida[,4,drop=FALSE],1,max),
+    FAV=apply(PertSaida[,2,drop=FALSE],1,max)
   )
 
   Resultado <- left_join(pif_pid, Pertinencias, by = "Gen")
