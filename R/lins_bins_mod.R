@@ -100,8 +100,8 @@ lin_binns = function(data, env, gen, rep, var) {
 
   # pertinences
   pert_pif <- pif_pid %>%
-    mutate(baixo = zmf(pif_pad, 0, 60),
-           alto = smf(pif_pad, 0, 60)) %>%
+    mutate(baixo = zmf(pif_pad, 0, 100),
+           alto = smf(pif_pad, 0, 100)) %>%
     select(Gen, baixo, alto)
 
   pert_pid <- pif_pid %>%

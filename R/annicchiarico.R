@@ -88,15 +88,28 @@ annicchiarico = function(data, env, gen, rep, var){
 
   W <- reduce(list(Wg, Wd, Wf), left_join, by = "Gen")
 
+  # Padronizar Wd e Wi
+  LI=0
+  LS=100
+
+  WdMax=mean(W$Wd)+3*sd(W$Wd)
+  WdMin=mean(W$Wd)-3*sd(W$Wd)
+  WfMax=mean(W$Wf)+3*sd(W$Wf)
+  WfMin=mean(W$Wf)-3*sd(W$Wf)
+
+  W <- W %>%
+    mutate(wf_pad = LS + (LS - LI) * (Wf - WfMax) / (WfMax - WfMin))%>%
+    mutate(wd_pad = LS + (LS - LI) * (Wd - WdMax) / (WdMax - WdMin))
+
 # Fuzificação
   pert_wd <- W%>%mutate(
-    baixa = zmf(Wd,0,200),
-    alta = smf(Wd,0,200)
+    baixa = zmf(wd_pad,0,100),
+    alta = smf(wd_pad,0,100)
   )%>%select(Gen, baixa, alta)
 
   pert_wf <- W%>%mutate(
-    baixa = zmf(Wf,0,200),
-    alta = smf(Wf,0,200)
+    baixa = zmf(wf_pad,0,100),
+    alta = smf(wf_pad,0,100)
   )%>%select(Gen, baixa, alta)
 
   Regras=matrix(c(1,2,1,
