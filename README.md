@@ -1,3 +1,5 @@
+<img src="man/figures/logo.png" align="right" height="139" />
+
 The `safuzzy` package allows you to perform adaptability and stability analysis, in addition to interpreting methodologies by fuzzy inference.
 
 To install `safuzzy` package you need to uso `devtools`: `devtools::install_github('douglasomaciel/safuzzy')`.
