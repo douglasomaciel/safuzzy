@@ -3,3 +3,5 @@
 ^\.positai$
 ^\.claude$
 ^LICENSE\.md$
+^CRAN-SUBMISSION$
+^cran-comments\.md$

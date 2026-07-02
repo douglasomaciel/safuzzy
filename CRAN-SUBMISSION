@@ -1,0 +1,32 @@
+Version: 0.1.1
+Date: 2026-07-02 16:26:31 UTC
+SHA: fatal: detected dubious ownership in repository at
+          'D:/Windows/Documentos/Mestrado/Dados/safuzzy'
+
+Version: 0.1.1
+Date: 2026-07-02 16:26:31 UTC
+SHA: 'D:/Windows/Documentos/Mestrado/Dados/safuzzy' is owned by:
+
+Version: 0.1.1
+Date: 2026-07-02 16:26:31 UTC
+SHA: /Todos (S-1-1-0)
+
+Version: 0.1.1
+Date: 2026-07-02 16:26:31 UTC
+SHA: but the current user is:
+
+Version: 0.1.1
+Date: 2026-07-02 16:26:31 UTC
+SHA: DESKTOP-4KHSNA6/dougl (S-1-5-21-1113392395-1080329360-3911161096-1001)
+
+Version: 0.1.1
+Date: 2026-07-02 16:26:31 UTC
+SHA: To add an exception for this directory, call:
+
+Version: 0.1.1
+Date: 2026-07-02 16:26:31 UTC
+SHA:
+
+Version: 0.1.1
+Date: 2026-07-02 16:26:31 UTC
+SHA: git config --global --add safe.directory D:/Windows/Documentos/Mestrado/Dados/safuzzy
