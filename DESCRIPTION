@@ -10,8 +10,12 @@ Authors@R: c(
     )
   )
 Description: A powerful tool for analyzing the adaptability and stability of genotypes that integrates fuzzy logic. Through classification based on degrees of membership, the package offers a detailed assessment of the behavior of genotypes in different groups of environments, providing valuable insights for genetic improvement.
-License: MIT
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.3.3
+RoxygenNote: 8.0.0
 Date: 2025-05-06
+Imports: 
+    dplyr,
+    purrr,
+    tidyr

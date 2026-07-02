@@ -13,15 +13,15 @@
 #' @import dplyr
 #'
 #' @return A data frame containing the following estimates:
-#'   \itemize{
-#'     \item{\code{Gen}}{: Genotype.}
-#'     \item{\code{PIF}}{: Performance index in favorable environments.}
-#'     \item{\code{PID}}{: Performance index in unfavorable environments.}
-#'     \item{\code{GE}}{: Membership (\%) to the general stability genotypes group.}
-#'     \item{\code{PA}}{: Membership (\%) to the  poorly adapted geotypes group.}
-#'     \item{\code{FAV}}{: Membership (\%) to the favorable adaptade genotypes group.}
-#'     \item{\code{UNF}}{: Membership (\%) to the unffavorable adaptade genotypes group.}
-#'   }
+#' \describe{
+#'   \item{\code{Gen}}{Genotype.}
+#'   \item{\code{PIF}}{Performance index in favorable environments.}
+#'   \item{\code{PID}}{Performance index in unfavorable environments.}
+#'   \item{\code{GE}}{Membership (\%) to the general stability genotypes group.}
+#'   \item{\code{PA}}{Membership (\%) to the poorly adapted genotypes group.}
+#'   \item{\code{FAV}}{Membership (\%) to the favorable adapted genotypes group.}
+#'   \item{\code{UNF}}{Membership (\%) to the unfavorable adapted genotypes group.}
+#' }
 #'
 #' @seealso \code{\link{eberhart_russell}}
 #' @seealso \code{\link{hybrid}}

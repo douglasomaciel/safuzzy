@@ -19,16 +19,16 @@ eberhart_russell(data, env, gen, rep, var)
 }
 \value{
 A data frame containing the following estimates:
-  \itemize{
-    \item{\code{Gen}}{: Genotype.}
-    \item{\code{B_0}}{: Mean of the variable for each genotype.}
-    \item{\code{B_1}}{: Regression coefficient (B_1) for each genotype.}
-    \item{\code{R2}}{: Coefficient of determination (R²) for each genotype.}
-    \item{\code{GE}}{: Membership (\%) to the general stability genotypes group.}
-    \item{\code{PA}}{: Membership (\%) to the  poorly adapted geotypes group.}
-    \item{\code{FAV}}{: Membership (\%) to the favorable adaptade genotypes group.}
-    \item{\code{UNF}}{: Membership (\%) to the unffavorable adaptade genotypes group.}
-  }
+\describe{
+  \item{\code{Gen}}{Genotype.}
+  \item{\code{B_0}}{Mean of the variable for each genotype.}
+  \item{\code{B_1}}{Regression coefficient ($B_1$) for each genotype.}
+  \item{\code{R2}}{Coefficient of determination ($R^2$) for each genotype.}
+  \item{\code{GE}}{Membership (\%) to the general stability genotypes group.}
+  \item{\code{PA}}{Membership (\%) to the poorly adapted genotypes group.}
+  \item{\code{FAV}}{Membership (\%) to the favorable adapted genotypes group.}
+  \item{\code{UNF}}{Membership (\%) to the unfavorable adapted genotypes group.}
+}
 }
 \description{
 Adaptability and Stability Analysis based on the interpretation of the Eberhart & Russel 1966 methodology, developed by Carneiro et al. 2018.

@@ -14,20 +14,20 @@
 #' @import dplyr
 #'
 #' @return A data frame containing the following estimates:
-#'   \itemize{
-#'     \item{\code{Gen}}{: Genotype.}
-#'     \item{\code{B_0}}{: Mean of the variable for each genotype.}
-#'     \item{\code{B_1}}{: Regression coefficient (B_1) for each genotype.}
-#'     \item{\code{B1_B2}}{: Regression coefficient (B1+B2) for each genotype.}
-#'     \item{\code{R2}}{: Coefficient of determination (R²) for each genotype.}
-#'     \item{\code{MdAF}}{: Membership (\%) to the average adaptability to favorable environments genotypes group.}
-#'     \item{\code{Nda}}{: Membership (\%) to the  poorly adapted geotypes group.}
-#'     \item{\code{MdAG}}{: Membership (\%) to the general adaptability to favorable environments genotypes group.}
-#'     \item{\code{MaxGF}}{: Membership (\%) to the maximum adaptability to favorable environments genotypes group.}
-#'     \item{\code{MaxDes}}{: Membership (\%) to the maximum adaptability to unfavorable environments genotypes group.}
-#'     \item{\code{BE}}{: Membership (\%) to the low stability genotypes group.}
-#'     \item{\code{BP}}{: Membership (\%) to the low yield genotypes group.}
-#'   }
+#' \describe{
+#'   \item{\code{Gen}}{Genotype.}
+#'   \item{\code{B_0}}{Mean of the variable for each genotype.}
+#'   \item{\code{B_1}}{Regression coefficient ($B_1$) for each genotype.}
+#'   \item{\code{B1_B2}}{Regression coefficient ($B_1 + B_2$) for each genotype.}
+#'   \item{\code{R2}}{Coefficient of determination ($R^2$) for each genotype.}
+#'   \item{\code{MdAF}}{Membership (\%) to the average adaptability to favorable environments genotypes group.}
+#'   \item{\code{Nda}}{Membership (\%) to the poorly adapted genotypes group.}
+#'   \item{\code{MdAG}}{Membership (\%) to the general adaptability to favorable environments genotypes group.}
+#'   \item{\code{MaxGF}}{Membership (\%) to the maximum adaptability to favorable environments genotypes group.}
+#'   \item{\code{MaxDes}}{Membership (\%) to the maximum adaptability to unfavorable environments environments group.}
+#'   \item{\code{BE}}{Membership (\%) to the low stability genotypes group.}
+#'   \item{\code{BP}}{Membership (\%) to the low yield genotypes group.}
+#' }
 #'
 #'
 #' @seealso \code{\link{hybrid}}

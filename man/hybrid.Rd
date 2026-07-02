@@ -19,17 +19,17 @@ hybrid(data, env, gen, rep, var)
 }
 \value{
 Um data frame contendo as seguintes estimativas:
-  \itemize{
-    \item{\code{Gen}}{: Genotype.}
-    \item{\code{PIF}}{: Performance index in favorable environments.}
-    \item{\code{PID}}{: Performance index in unfavorable environments.}
-    \item{\code{B_1}}{: Regression coefficient (B_1) for each genotype.}
-    \item{\code{R2}}{: Standardized coefficient of determination (R²) for each genotype.}
-    \item{\code{GE}}{: Membership (\%) to the general stability genotypes group.}
-    \item{\code{PA}}{: Membership (\%) to the  poorly adapted geotypes group.}
-    \item{\code{FAV}}{: Membership (\%) to the favorable adaptade genotypes group.}
-    \item{\code{UNF}}{: Membership (\%) to the unffavorable adaptade genotypes group.}
-  }
+\describe{
+  \item{\code{Gen}}{Genotype.}
+  \item{\code{PIF}}{Performance index in favorable environments.}
+  \item{\code{PID}}{Performance index in unfavorable environments.}
+  \item{\code{B_1}}{Regression coefficient ($B_1$) for each genotype.}
+  \item{\code{R2}}{Standardized coefficient of determination ($R^2$) for each genotype.}
+  \item{\code{GE}}{Membership (\%) to the general stability genotypes group.}
+  \item{\code{PA}}{Membership (\%) to the poorly adapted genotypes group.}
+  \item{\code{FAV}}{Membership (\%) to the favorable adapted genotypes group.}
+  \item{\code{UNF}}{Membership (\%) to the unfavorable adapted genotypes group.}
+}
 }
 \description{
 Stability and Adaptability Analysis based on the interpretation of the Eberhart & Russel 1966 methodology, associated with the modified Lins & Bins (1988) methodology, developed by Carneiro et al. (2020).
