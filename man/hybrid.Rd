@@ -35,14 +35,10 @@ Um data frame contendo as seguintes estimativas:
 Stability and Adaptability Analysis based on the interpretation of the Eberhart & Russel 1966 methodology, associated with the modified Lins & Bins (1988) methodology, developed by Carneiro et al. (2020).
 }
 \examples{
-# Caminho do arquivo de dados
-caminho <- system.file("extdata", "Dados.csv", package = "safuzzy")
 
-# Leitura do arquivo
-dados = read.csv2(caminho)
+data(ge_data)
 
-# Uso da função com a variável de interesse
-hybrid(data = dados, env = environment, gen = treatment, rep = block, var = gy)
+hybrid(data = ge_data, env = environment, gen = genotype, rep = block, var = gy)
 
 }
 \references{

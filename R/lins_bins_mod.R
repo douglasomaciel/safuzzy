@@ -29,14 +29,10 @@
 #' @author Douglas de Oliveira Maciel \email{douglasmaciel@discente.ufg.br}
 #'
 #' @examples
-#' # Caminho do arquivo de dados
-#' caminho <- system.file("extdata", "Dados.csv", package = "safuzzy")
 #'
-#' # Leitura do arquivo
-#' dados = read.csv2(caminho)
+#' data(ge_data)
 #'
-#' # Uso da função com a variável de interesse
-#' lin_binns(data = dados, env = environment, gen = treatment, rep = block, var = gy)
+#' lin_binns(data = ge_data, env = environment, gen = genotype, rep = block, var = gy)
 #'
 #' @export
 

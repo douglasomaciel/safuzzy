@@ -1,7 +1,7 @@
 Package: safuzzy
 Type: Package
-Title: Stability Analysis with Fuzzy logic
-Version: 0.1.0
+Title: Stability Analysis with Fuzzy Logic
+Version: 0.1.1
 Authors@R: c(
     person(
       "Maciel", "Douglas, O.",
@@ -9,7 +9,9 @@ Authors@R: c(
       role = c("aut", "cre")
     )
   )
-Description: A powerful tool for analyzing the adaptability and stability of genotypes that integrates fuzzy logic. Through classification based on degrees of membership, the package offers a detailed assessment of the behavior of genotypes in different groups of environments, providing valuable insights for genetic improvement.
+Description: It integrates 'fuzzy logic' into the analysis of genotype adaptability and stability.
+              By classifying genotypes based on degrees of belonging, the package provides a detailed 
+              assessment of their behavior in different environmental groups.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -19,3 +21,5 @@ Imports:
     dplyr,
     purrr,
     tidyr
+Depends: 
+    R (>= 3.5)

@@ -37,14 +37,9 @@
 #' @author Douglas de Oliveira Maciel \email{douglasmaciel@discente.ufg.br}
 #'
 #' @examples
-#' # Caminho do arquivo de dados
-#' caminho <- system.file("extdata", "Dados.csv", package = "safuzzy")
+#' data(ge_data)
 #'
-#' # Leitura do arquivo
-#' dados = read.csv2(caminho)
-#'
-#' # Uso da função com a variável de interesse
-#' cruz_torres_vencovsky(data = dados, env = environment, gen = treatment, rep = block, var = gy)
+#' cruz_torres_vencovsky(data = ge_data, env = environment, gen = genotype, rep = block, var = gy)
 
 #' @export
 

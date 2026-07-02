@@ -34,14 +34,10 @@ A data frame containing the following estimates:
 Adaptability and Stability Analysis based on the interpretation of the Eberhart & Russel 1966 methodology, developed by Carneiro et al. 2018.
 }
 \examples{
-# Caminho do arquivo de dados
-caminho <- system.file("extdata", "Dados.csv", package = "safuzzy")
 
-# Leitura do arquivo
-dados = read.csv2(caminho)
+data(ge_data)
 
-# Uso da função com a variável de interesse
-eberhart_russell(data = dados, env = environment, gen = treatment, rep = block, var = gy)
+eberhart_russell(data = ge_data, env = environment, gen = genotype, rep = block, var = gy)
 
 }
 \references{

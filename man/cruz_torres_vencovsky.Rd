@@ -38,14 +38,9 @@ A data frame containing the following estimates:
 Adaptability and Stability Analysis based on the interpretation of the Cruz, Torres & Vencovsky (1989), developed by Carneiro et al. 2019.
 }
 \examples{
-# Caminho do arquivo de dados
-caminho <- system.file("extdata", "Dados.csv", package = "safuzzy")
+data(ge_data)
 
-# Leitura do arquivo
-dados = read.csv2(caminho)
-
-# Uso da função com a variável de interesse
-cruz_torres_vencovsky(data = dados, env = environment, gen = treatment, rep = block, var = gy)
+cruz_torres_vencovsky(data = ge_data, env = environment, gen = genotype, rep = block, var = gy)
 }
 \references{
 Carneiro, A. R. T., Sanglard, D. A., Azevedo, A. M., Souza, T. L. P. O. D., Pereira, H. S., & Melo, L. C. (2019). Fuzzy logic in automation for interpretation of adaptability and stability in plant breeding studies. Scientia Agricola, 76(2), 123-129.

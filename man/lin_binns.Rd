@@ -33,14 +33,10 @@ A data frame containing the following estimates:
 Stability and Adaptability Analysis based on the interpretation of the modified Lins and Bins (1988) methodology.
 }
 \examples{
-# Caminho do arquivo de dados
-caminho <- system.file("extdata", "Dados.csv", package = "safuzzy")
 
-# Leitura do arquivo
-dados = read.csv2(caminho)
+data(ge_data)
 
-# Uso da função com a variável de interesse
-lin_binns(data = dados, env = environment, gen = treatment, rep = block, var = gy)
+lin_binns(data = ge_data, env = environment, gen = genotype, rep = block, var = gy)
 
 }
 \references{

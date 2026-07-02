@@ -34,14 +34,9 @@ A data frame containing the following estimates:
 Adaptability and Stability Analysis based on the interpretation of the Annicchiarico 1992 methodology, developed by Carneiro et al. 2019.
 }
 \examples{
-# Caminho do arquivo de dados
-caminho <- system.file("extdata", "Dados.csv", package = "safuzzy")
 
-# Leitura do arquivo
-dados = read.csv2(caminho)
-
-# Uso da função com a variável de interesse
-annicchiarico(data = dados, env = environment, gen = treatment, rep = block, var = gy)
+data(ge_data)
+annicchiarico(data = ge_data, env = environment, gen = genotype, rep = block, var = gy)
 
 }
 \references{
