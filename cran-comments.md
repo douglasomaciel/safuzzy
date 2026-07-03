@@ -1,6 +1,5 @@
 ## Resubmission
-This is a resubmission. 
+This is a resubmission.
 
 ## Fixes
-* Updated the Date field in DESCRIPTION.
-* Fixed DOI formatting in ge_data.Rd using the \doi{} tag.
+* Fixed the `\doi{}` formatting in `ge_data.Rd`. The tag is now standalone and no longer nested inside url or file markup, as requested by the CRAN team.

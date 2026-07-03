@@ -39,6 +39,6 @@ head(ge_data)
 Maciel, D. D. O., Guimarães, P. H. R., & Melo, P. G. S. (2025).
 Harnessing fuzzy logic for adaptive and stable selection of upland rice lines.
 \emph{Crop Breeding and Applied Biotechnology}, 25(2), e527425213.
-\url{\doi{10.1590/1984-70332025v25n2a28}}
+\doi{10.1590/1984-70332025v25n2a28}
 }
 \keyword{datasets}
